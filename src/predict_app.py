@@ -7,7 +7,8 @@ import lightgbm as lgb
 
 # Load the trained model from Hopsworks/MLflow
 def load_model():
-    model = mlflow.sklearn.load_model("models/lgbm_model")  # Adjust to your model path
+    run_id = "757049af1f524840ba2d9c30afd32566"  # Your Run ID here
+    model = mlflow.sklearn.load_model(f"runs:/{run_id}/model")  # Load model from the specific run
     return model
 
 # Function to make predictions
