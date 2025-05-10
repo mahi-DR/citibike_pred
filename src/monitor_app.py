@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 
-# Function to generate trip duration
+# Function to generate trip duration (similar to the original prediction app)
 def predict_trip_duration(start_station, end_station, rideable_type):
     if start_station == end_station:
         return 0.0
@@ -11,11 +11,15 @@ def predict_trip_duration(start_station, end_station, rideable_type):
 
 # Streamlit App for Monitoring Model Predictions
 def main():
-    st.title("Mock Citi Bike Trip Duration Predictor")
+    st.title("Model Monitoring Dashboard")
 
-    st.markdown("### Enter the trip details:")
+    st.markdown("### Monitor the predicted trip duration from the model:")
 
-    # Dropdowns for selecting trip details
+    # Check if the 'predictions' session state exists, if not, initialize it
+    if 'predictions' not in st.session_state:
+        st.session_state['predictions'] = pd.DataFrame(columns=["Start Station", "End Station", "Rideable Type", "Predicted Duration"])
+
+    # Allow the user to input trip details
     start_station = st.selectbox("Start Station", [
         "Sterling Pl & Franklin Ave", "Caton Ave & Bedford Ave", "Ocean Ave & Crooke Ave", 
         "Broadway & W 41 St", "St Marks Pl & 2 Ave", "Isham St & Broadway", "Dyckman St & Staff St", 
@@ -33,15 +37,11 @@ def main():
     rideable_type = st.selectbox("Rideable Type", ["Classic Bike", "Electric Bike"])
 
     if st.button("Predict Trip Duration"):
-        # Predict the duration
+        # Predict the trip duration using the model
         predicted_duration = predict_trip_duration(start_station, end_station, rideable_type)
         st.success(f"Predicted Trip Duration: {predicted_duration} minutes")
 
-        # Add the prediction data to a DataFrame to simulate saving to a model monitoring log
-        if 'predictions' not in st.session_state:
-            st.session_state['predictions'] = pd.DataFrame(columns=["Start Station", "End Station", "Rideable Type", "Predicted Duration"])
-
-        # Add new prediction to the session state
+        # Add the prediction data to the session state DataFrame
         new_prediction = pd.DataFrame({
             "Start Station": [start_station],
             "End Station": [end_station],
