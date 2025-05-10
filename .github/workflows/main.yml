@@ -1,0 +1,40 @@
+name: Full Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual triggering of this workflow
+
+jobs:
+  trigger-feature-engineering:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Feature Engineering Workflow
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          repository: mahi-DR/citibike_pred
+          workflow: feature-engineering.yml
+          ref: main  # Specify the branch you want to trigger the workflow on
+
+  trigger-inference:
+    needs: trigger-feature-engineering  # Only run this after the feature-engineering job is successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Inference Workflow
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          repository: mahi-DR/citibike_pred
+          workflow: inference.yml
+          ref: main
+
+  trigger-model-training:
+    needs: trigger-inference  # Only run this after the inference job is successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Model Training Workflow
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          repository: mahi-DR/citibike_pred
+          workflow: model-training.yml
+          ref: main
