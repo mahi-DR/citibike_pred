@@ -6,7 +6,7 @@ import os
 API_KEY = "WcQh11Y4g9GujrSD.nq14GZriFX54wIyUD22JGD3OMjbQolCgwPXpcfXMYmd4VvyCUXT5WEBc7pxr70dD"
 PROJECT_NAME = "citibikes_pred"
 FEATURE_GROUP_NAME = "cbtpsc_cleaned_v1"
-INPUT_CSV = "data/raw_data/citibike_tripdata.csv"
+INPUT_CSV = "data/202504-citibike-tripdata_4.csv"
 
 def load_data(file_path):
     df = pd.read_csv(file_path)
