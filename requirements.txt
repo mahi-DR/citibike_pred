@@ -1,0 +1,5 @@
+pandas
+hopsworks
+mlflow
+lightgbm
+scikit-learn
