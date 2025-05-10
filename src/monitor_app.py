@@ -54,12 +54,15 @@ def main():
         st.write("Predictions History:")
         st.dataframe(st.session_state['predictions'])
 
-        # Plot the trip duration over time (or number of model runs)
-        plt.plot(st.session_state['predictions']["Predicted Duration"])
-        plt.title("Trip Duration Over Time")
-        plt.xlabel("Prediction Run Number")
-        plt.ylabel("Predicted Trip Duration (minutes)")
-        st.pyplot()
+        # Create a figure and axes for the plot
+        fig, ax = plt.subplots()
+        ax.plot(st.session_state['predictions']["Predicted Duration"])
+        ax.set_title("Trip Duration Over Time")
+        ax.set_xlabel("Prediction Run Number")
+        ax.set_ylabel("Predicted Trip Duration (minutes)")
+
+        # Display the plot
+        st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
