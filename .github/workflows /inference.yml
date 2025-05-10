@@ -31,8 +31,8 @@ jobs:
 
     - name: Commit and Push Inference Results (Optional)
       run: |
-        git config --global user.name "Your Name"
-        git config --global user.email "your.email@example.com"
+        git config --global user.name "mahi-DR"
+        git config --global user.email "desireddy.mahiswar.2002@gmail.com"
         git add inference_results.csv
         git commit -m "Add inference results"
         git push
