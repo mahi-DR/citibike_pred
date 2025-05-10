@@ -17,12 +17,12 @@ jobs:
             const { data: run } = await github.actions.createWorkflowDispatch({
               owner: 'mahi-DR',
               repo: 'citibike_pred',
-              workflow_id: 'feature-engineering.yml',  # Ensure this matches the exact name of your workflow file
+              workflow_id: 'feature-engineering.yml',  # This should match the name of your workflow file
               ref: 'main'  # The branch to trigger the workflow
             })
 
   trigger-inference:
-    needs: trigger-feature-engineering  # Ensure this runs only after feature-engineering is successful
+    needs: trigger-feature-engineering  # Ensure this runs after the feature-engineering job
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Inference Workflow
@@ -32,12 +32,12 @@ jobs:
             const { data: run } = await github.actions.createWorkflowDispatch({
               owner: 'mahi-DR',
               repo: 'citibike_pred',
-              workflow_id: 'inference.yml',  # Ensure this matches the exact name of your workflow file
-              ref: 'main'
+              workflow_id: 'inference.yml',  # This should match the name of your workflow file
+              ref: 'main'  # The branch to trigger the workflow
             })
 
   trigger-model-training:
-    needs: trigger-inference  # Ensure this runs only after inference is successful
+    needs: trigger-inference  # Ensure this runs after the inference job
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Model Training Workflow
@@ -47,6 +47,6 @@ jobs:
             const { data: run } = await github.actions.createWorkflowDispatch({
               owner: 'mahi-DR',
               repo: 'citibike_pred',
-              workflow_id: 'model-training.yml',  # Ensure this matches the exact name of your workflow file
-              ref: 'main'
+              workflow_id: 'model-training.yml',  # This should match the name of your workflow file
+              ref: 'main'  # The branch to trigger the workflow
             })
