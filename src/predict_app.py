@@ -20,7 +20,7 @@ def predict_trip_duration(start_station, end_station, rideable_type):
         return 0.0
     return round(random.uniform(4, 10), 2)
 
-# Function to save prediction to CSV, creating the file if it doesn't exist
+# Save prediction to CSV file, creating it if it doesn't exist
 def save_prediction_to_csv(start_station, end_station, rideable_type, predicted_duration):
     new_prediction = {
         "Start Station": start_station,
@@ -28,22 +28,19 @@ def save_prediction_to_csv(start_station, end_station, rideable_type, predicted_
         "Rideable Type": rideable_type,
         "Predicted Duration": predicted_duration
     }
-    
+
     # Check if the CSV file exists
     file_exists = os.path.exists('predictions.csv')
     
     # If file exists, append to it, otherwise create the file
     if file_exists:
         df_predictions = pd.read_csv('predictions.csv')
-        # Instead of append(), use pd.concat() to add the new row
         df_predictions = pd.concat([df_predictions, pd.DataFrame([new_prediction])], ignore_index=True)
         df_predictions.to_csv('predictions.csv', index=False)
     else:
-        # Create a new CSV file and write the first row of data
+        # If the file doesn't exist, create a new one and save the first prediction
         df_predictions = pd.DataFrame([new_prediction])
         df_predictions.to_csv('predictions.csv', index=False)
-
-# Streamlit App for Predicting Trip Duration
 def main():
     st.title("Mock Citi Bike Trip Duration Predictor")
 
@@ -69,25 +66,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Save prediction to CSV file, creating it if it doesn't exist
-def save_prediction_to_csv(start_station, end_station, rideable_type, predicted_duration):
-    new_prediction = {
-        "Start Station": start_station,
-        "End Station": end_station,
-        "Rideable Type": rideable_type,
-        "Predicted Duration": predicted_duration
-    }
 
-    # Check if the CSV file exists
-    file_exists = os.path.exists('predictions.csv')
-    
-    # If file exists, append to it, otherwise create the file
-    if file_exists:
-        df_predictions = pd.read_csv('predictions.csv')
-        df_predictions = pd.concat([df_predictions, pd.DataFrame([new_prediction])], ignore_index=True)
-        df_predictions.to_csv('predictions.csv', index=False)
-    else:
-        # If the file doesn't exist, create a new one and save the first prediction
-        df_predictions = pd.DataFrame([new_prediction])
-        df_predictions.to_csv('predictions.csv', index=False)
 
