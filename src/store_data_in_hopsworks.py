@@ -45,4 +45,4 @@ def store_data_in_hopsworks(df, feature_group_name, project_name, api_key_value)
 # Example usage
 if __name__ == "__main__":
     df = pd.read_csv("data/inference_results/inference_results.csv")  # Your inference results
-    store_data_in_hopsworks(df, "cbtpsc_predictions_v1", "bike", "your_hopsworks_api_key")
+    store_data_in_hopsworks(df, "cbtpsc_predictions_v1", "citibikes_pred", "WcQh11Y4g9GujrSD.nq14GZriFX54wIyUD22JGD3OMjbQolCgwPXpcfXMYmd4VvyCUXT5WEBc7pxr70dD")
