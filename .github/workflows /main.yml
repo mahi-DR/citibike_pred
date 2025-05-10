@@ -1,0 +1,52 @@
+name: Full Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  trigger-feature-engineering:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Feature Engineering Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: run } = await github.actions.createWorkflowDispatch({
+              owner: 'mahi-DR',
+              repo: 'citibike_pred',
+              workflow_id: 'feature-engineering.yml',  # Ensure this matches the exact name of your workflow file
+              ref: 'main'
+            })
+
+  trigger-inference:
+    needs: trigger-feature-engineering
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Inference Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: run } = await github.actions.createWorkflowDispatch({
+              owner: 'mahi-DR',
+              repo: 'citibike_pred',
+              workflow_id: 'inference.yml',  # Ensure this matches the exact name of your workflow file
+              ref: 'main'
+            })
+
+  trigger-model-training:
+    needs: trigger-inference
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Model Training Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: run } = await github.actions.createWorkflowDispatch({
+              owner: 'mahi-DR',
+              repo: 'citibike_pred',
+              workflow_id: 'model-training.yml',  # Ensure this matches the exact name of your workflow file
+              ref: 'main'
+            })
