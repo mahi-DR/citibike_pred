@@ -3,8 +3,8 @@ import hopsworks
 from hsfs.feature import Feature
 import os
 
-API_KEY = "your_hopsworks_api_key"
-PROJECT_NAME = "bike"
+API_KEY = "WcQh11Y4g9GujrSD.nq14GZriFX54wIyUD22JGD3OMjbQolCgwPXpcfXMYmd4VvyCUXT5WEBc7pxr70dD"
+PROJECT_NAME = "citibikes_pred"
 FEATURE_GROUP_NAME = "cbtpsc_cleaned_v1"
 INPUT_CSV = "data/raw_data/citibike_tripdata.csv"
 
