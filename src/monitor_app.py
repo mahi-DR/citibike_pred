@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def fetch_prediction_data():
     # Try reading the CSV file if it exists
     try:
-        df_predictions = pd.read_csv('predictions.csv')
+        df_predictions = pd.read_csv('../predictions.csv')  # Adjust the path if necessary
         return df_predictions
     except FileNotFoundError:
         return pd.DataFrame(columns=["Start Station", "End Station", "Rideable Type", "Predicted Duration"])
