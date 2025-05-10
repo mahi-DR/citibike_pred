@@ -1,5 +1,7 @@
 import streamlit as st
 import random
+import pandas as pd
+import os
 
 # List of actual station names
 stations = [
@@ -18,6 +20,27 @@ def predict_trip_duration(start_station, end_station, rideable_type):
         return 0.0
     return round(random.uniform(4, 10), 2)
 
+# Function to append new prediction to CSV file
+def save_prediction_to_csv(start_station, end_station, rideable_type, predicted_duration):
+    # Create the data to save as a new row
+    new_prediction = {
+        "Start Station": start_station,
+        "End Station": end_station,
+        "Rideable Type": rideable_type,
+        "Predicted Duration": predicted_duration
+    }
+    
+    # Check if the CSV file exists
+    if os.path.exists('predictions.csv'):
+        # If the file exists, append the new prediction
+        df_predictions = pd.read_csv('predictions.csv')
+        df_predictions = df_predictions.append(new_prediction, ignore_index=True)
+        df_predictions.to_csv('predictions.csv', index=False)
+    else:
+        # If the file doesn't exist, create a new one and save the prediction
+        df_predictions = pd.DataFrame([new_prediction])
+        df_predictions.to_csv('predictions.csv', index=False)
+
 # Streamlit App for Predicting Trip Duration
 def main():
     st.title("Mock Citi Bike Trip Duration Predictor")
@@ -33,21 +56,13 @@ def main():
         predicted_duration = predict_trip_duration(start_station, end_station, rideable_type)
         st.success(f"Predicted Trip Duration: {predicted_duration} minutes")
 
-        # Save the prediction in session_state
-        if 'predictions' not in st.session_state:
-            st.session_state['predictions'] = []
+        # Save the prediction to the CSV file
+        save_prediction_to_csv(start_station, end_station, rideable_type, predicted_duration)
 
-        # Append the new prediction
-        st.session_state['predictions'].append({
-            "Start Station": start_station,
-            "End Station": end_station,
-            "Rideable Type": rideable_type,
-            "Predicted Duration": predicted_duration
-        })
-
-        # Display all predictions in the session state
+        # Display the updated predictions table from the CSV file
+        df_predictions = pd.read_csv('predictions.csv')
         st.write("Predictions History:")
-        st.dataframe(st.session_state['predictions'])
+        st.dataframe(df_predictions)
 
 if __name__ == "__main__":
     main()
