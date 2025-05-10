@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Function to fetch model metrics from MLflow
 def fetch_model_metrics():
     client = mlflow.tracking.MlflowClient()
-    experiment_id = "your_experiment_id"  # Replace with your actual experiment ID
+    experiment_id = "757049af1f524840ba2d9c30afd32566"  # Replace with your actual experiment ID
     runs = client.search_runs(experiment_id)
 
     metrics = []
