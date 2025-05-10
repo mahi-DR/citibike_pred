@@ -35,7 +35,8 @@ def save_prediction_to_csv(start_station, end_station, rideable_type, predicted_
     # If file exists, append to it, otherwise create the file
     if file_exists:
         df_predictions = pd.read_csv('predictions.csv')
-        df_predictions = df_predictions.append(new_prediction, ignore_index=True)
+        # Instead of append(), use pd.concat() to add the new row
+        df_predictions = pd.concat([df_predictions, pd.DataFrame([new_prediction])], ignore_index=True)
         df_predictions.to_csv('predictions.csv', index=False)
     else:
         # Create a new CSV file and write the first row of data
