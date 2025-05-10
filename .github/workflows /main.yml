@@ -17,7 +17,7 @@ jobs:
             const { data: run } = await github.actions.createWorkflowDispatch({
               owner: 'mahi-DR',
               repo: 'citibike_pred',
-              workflow_id: 'feature-engineering.yml',  # This should match the name of your workflow file
+              workflow_id: 'feature-engineering.yml',  # Ensure this matches the exact name of your workflow file
               ref: 'main'  # The branch to trigger the workflow
             })
 
