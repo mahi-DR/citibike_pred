@@ -18,7 +18,7 @@ def predict_trip_duration(start_station, end_station, rideable_type):
         return 0.0
     return round(random.uniform(4, 10), 2)
 
-# Streamlit App
+# Streamlit App for Predicting Trip Duration
 def main():
     st.title("Mock Citi Bike Trip Duration Predictor")
 
@@ -29,8 +29,25 @@ def main():
     rideable_type = st.selectbox("Rideable Type", ["Classic Bike", "Electric Bike"])
 
     if st.button("Predict Trip Duration"):
+        # Predict the trip duration
         predicted_duration = predict_trip_duration(start_station, end_station, rideable_type)
         st.success(f"Predicted Trip Duration: {predicted_duration} minutes")
+
+        # Save the prediction in session_state
+        if 'predictions' not in st.session_state:
+            st.session_state['predictions'] = []
+
+        # Append the new prediction
+        st.session_state['predictions'].append({
+            "Start Station": start_station,
+            "End Station": end_station,
+            "Rideable Type": rideable_type,
+            "Predicted Duration": predicted_duration
+        })
+
+        # Display all predictions in the session state
+        st.write("Predictions History:")
+        st.dataframe(st.session_state['predictions'])
 
 if __name__ == "__main__":
     main()
