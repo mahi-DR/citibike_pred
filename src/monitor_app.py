@@ -4,9 +4,12 @@ import matplotlib.pyplot as plt
 
 # Function to fetch prediction data from session_state
 def fetch_prediction_data():
+    # Debugging to ensure session state is working
     if 'predictions' in st.session_state:
+        st.write("Predictions found in session_state.")
         return pd.DataFrame(st.session_state['predictions'])
     else:
+        st.write("No predictions found in session_state.")
         return pd.DataFrame(columns=["Start Station", "End Station", "Rideable Type", "Predicted Duration"])
 
 # Streamlit app to monitor the predictions
