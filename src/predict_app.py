@@ -1,42 +1,36 @@
-
 import streamlit as st
-import pandas as pd
-import mlflow
-import mlflow.sklearn
-import lightgbm as lgb
+import random
 
-# Load the trained model from Hopsworks/MLflow
-def load_model():
-    run_id = "757049af1f524840ba2d9c30afd32566"  # Your Run ID here
-    model = mlflow.sklearn.load_model(f"runs:/{run_id}/model")  # Load model from the specific run
-    return model
+# List of actual station names
+stations = [
+    "Sterling Pl & Franklin Ave", "Caton Ave & Bedford Ave",
+    "Ocean Ave & Crooke Ave", "Broadway & W 41 St", "St Marks Pl & 2 Ave",
+    "Isham St & Broadway", "Dyckman St & Staff St", "W 111 St & 5 Ave",
+    "W 52 St & 5 Ave", "Rogers Ave & Sterling St", "Court St & State St",
+    "4488.08 Adams St & Prospect St", "President St & 4 Ave",
+    "4101.17 E 1 St & Bowery", "Underhill Ave & Pacific St",
+    "Prospect Pl & Underhill Ave", "Ave & W 131 St", "W54 St & 11 Ave"
+]
 
-# Function to make predictions
-def make_predictions(model, features):
-    predictions = model.predict([features])
-    return predictions
+# Function to generate trip duration
+def predict_trip_duration(start_station, end_station, rideable_type):
+    if start_station == end_station:
+        return 0.0
+    return round(random.uniform(4, 10), 2)
 
-# Streamlit UI
+# Streamlit App
 def main():
-    st.title("Citi Bike Trip Duration Prediction")
+    st.title("Mock Citi Bike Trip Duration Predictor")
 
-    st.markdown("Enter the details of the bike trip:")
+    st.markdown("### Enter the trip details:")
 
-    # User inputs for prediction (example: pickup and drop-off data)
-    start_station = st.selectbox("Start Station", ["Station 1", "Station 2", "Station 3"])  # Add real stations
+    start_station = st.selectbox("Start Station", stations)
+    end_station = st.selectbox("End Station", stations)
     rideable_type = st.selectbox("Rideable Type", ["Classic Bike", "Electric Bike"])
 
-    trip_duration = st.number_input("Trip Duration (Minutes)", min_value=0)
-
-    # When the user clicks the "Predict" button
-    if st.button("Predict"):
-        model = load_model()  # Load the trained model
-
-        # Example feature vector - in practice, you should map the inputs to your feature vector
-        features = [start_station, rideable_type, trip_duration]
-        
-        prediction = make_predictions(model, features)
-        st.write(f"Predicted Trip Duration: {prediction[0]:.2f} minutes")
+    if st.button("Predict Trip Duration"):
+        predicted_duration = predict_trip_duration(start_station, end_station, rideable_type)
+        st.success(f"Predicted Trip Duration: {predicted_duration} minutes")
 
 if __name__ == "__main__":
     main()
