@@ -20,9 +20,8 @@ def predict_trip_duration(start_station, end_station, rideable_type):
         return 0.0
     return round(random.uniform(4, 10), 2)
 
-# Function to append new prediction to CSV file
+# Function to save prediction to CSV, creating the file if it doesn't exist
 def save_prediction_to_csv(start_station, end_station, rideable_type, predicted_duration):
-    # Create the data to save as a new row
     new_prediction = {
         "Start Station": start_station,
         "End Station": end_station,
@@ -31,13 +30,15 @@ def save_prediction_to_csv(start_station, end_station, rideable_type, predicted_
     }
     
     # Check if the CSV file exists
-    if os.path.exists('predictions.csv'):
-        # If the file exists, append the new prediction
+    file_exists = os.path.exists('predictions.csv')
+    
+    # If file exists, append to it, otherwise create the file
+    if file_exists:
         df_predictions = pd.read_csv('predictions.csv')
         df_predictions = df_predictions.append(new_prediction, ignore_index=True)
         df_predictions.to_csv('predictions.csv', index=False)
     else:
-        # If the file doesn't exist, create a new one and save the prediction
+        # Create a new CSV file and write the first row of data
         df_predictions = pd.DataFrame([new_prediction])
         df_predictions.to_csv('predictions.csv', index=False)
 
