@@ -11,6 +11,7 @@ def register_model_in_hopsworks(model, model_name="LightGBM", project_name="citi
 
         # Get the model registry
         model_registry = project.get_model_registry()
+        model = model_registry.get_model("LightGBM")
 
         # Create a new model version (if needed)
         model_version = model_registry.create_model_version(
