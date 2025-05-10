@@ -1,63 +1,33 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import random
 
-# Function to generate trip duration (similar to the original prediction app)
-def predict_trip_duration(start_station, end_station, rideable_type):
-    if start_station == end_station:
-        return 0.0
-    return round(random.uniform(4, 10), 2)
+# Function to fetch prediction data from session_state
+def fetch_prediction_data():
+    if 'predictions' in st.session_state:
+        return pd.DataFrame(st.session_state['predictions'])
+    else:
+        return pd.DataFrame(columns=["Start Station", "End Station", "Rideable Type", "Predicted Duration"])
 
-# Streamlit App for Monitoring Model Predictions
+# Streamlit app to monitor the predictions
 def main():
     st.title("Model Monitoring Dashboard")
 
-    st.markdown("### Monitor the predicted trip duration from the model:")
+    st.markdown("### Monitor the predicted trip durations from the model:")
 
-    # Check if the 'predictions' session state exists, if not, initialize it
-    if 'predictions' not in st.session_state:
-        st.session_state['predictions'] = pd.DataFrame(columns=["Start Station", "End Station", "Rideable Type", "Predicted Duration"])
+    # Fetch the prediction data from session state
+    df_predictions = fetch_prediction_data()
 
-    # Allow the user to input trip details
-    start_station = st.selectbox("Start Station", [
-        "Sterling Pl & Franklin Ave", "Caton Ave & Bedford Ave", "Ocean Ave & Crooke Ave", 
-        "Broadway & W 41 St", "St Marks Pl & 2 Ave", "Isham St & Broadway", "Dyckman St & Staff St", 
-        "W 111 St & 5 Ave", "W 52 St & 5 Ave", "Rogers Ave & Sterling St", "Court St & State St", 
-        "4488.08 Adams St & Prospect St", "President St & 4 Ave", "4101.17 E 1 St & Bowery", 
-        "Underhill Ave & Pacific St", "Prospect Pl & Underhill Ave", "Ave & W 131 St", "W54 St & 11 Ave"
-    ])
-    end_station = st.selectbox("End Station", [
-        "Sterling Pl & Franklin Ave", "Caton Ave & Bedford Ave", "Ocean Ave & Crooke Ave", 
-        "Broadway & W 41 St", "St Marks Pl & 2 Ave", "Isham St & Broadway", "Dyckman St & Staff St", 
-        "W 111 St & 5 Ave", "W 52 St & 5 Ave", "Rogers Ave & Sterling St", "Court St & State St", 
-        "4488.08 Adams St & Prospect St", "President St & 4 Ave", "4101.17 E 1 St & Bowery", 
-        "Underhill Ave & Pacific St", "Prospect Pl & Underhill Ave", "Ave & W 131 St", "W54 St & 11 Ave"
-    ])
-    rideable_type = st.selectbox("Rideable Type", ["Classic Bike", "Electric Bike"])
-
-    if st.button("Predict Trip Duration"):
-        # Predict the trip duration using the model
-        predicted_duration = predict_trip_duration(start_station, end_station, rideable_type)
-        st.success(f"Predicted Trip Duration: {predicted_duration} minutes")
-
-        # Add the prediction data to the session state DataFrame
-        new_prediction = pd.DataFrame({
-            "Start Station": [start_station],
-            "End Station": [end_station],
-            "Rideable Type": [rideable_type],
-            "Predicted Duration": [predicted_duration]
-        })
-        st.session_state['predictions'] = pd.concat([st.session_state['predictions'], new_prediction], ignore_index=True)
-
-        # Display the updated predictions table
+    if df_predictions.empty:
+        st.write("No predictions available yet.")
+    else:
         st.write("Predictions History:")
-        st.dataframe(st.session_state['predictions'])
+        st.dataframe(df_predictions)
 
-        # Create a figure and axes for the plot
+        # Create a figure and axes for plotting
         fig, ax = plt.subplots()
-        ax.plot(st.session_state['predictions']["Predicted Duration"])
-        ax.set_title("Trip Duration Over Time")
+        ax.plot(df_predictions["Predicted Duration"], marker='o', linestyle='-', color='b')
+        ax.set_title("Predicted Trip Duration Over Time")
         ax.set_xlabel("Prediction Run Number")
         ax.set_ylabel("Predicted Trip Duration (minutes)")
 
