@@ -1,34 +1,52 @@
 name: Full Pipeline
 
 on:
-  workflow_run:
-    workflows: ["Feature Engineering", "Inference", "Model Training"]  # List the workflows you want to trigger based on success
-    types:
-      - completed
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  feature-engineering:
+  trigger-feature-engineering:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Feature Engineering
-        uses: actions/checkout@v2
-        run: |
-          echo "Running feature engineering step..."
+      - name: Trigger Feature Engineering Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: run } = await github.actions.createWorkflowDispatch({
+              owner: 'mahi-DR',
+              repo: 'citibike_pred',
+              workflow_id: 'feature-engineering.yml',  # This should match the name of your workflow file
+              ref: 'main'  # The branch to trigger the workflow
+            })
 
-  inference:
-    needs: feature-engineering
+  trigger-inference:
+    needs: trigger-feature-engineering  # Ensure this runs only after feature-engineering is successful
     runs-on: ubuntu-latest
     steps:
-      - name: Run Inference
-        uses: actions/checkout@v2
-        run: |
-          echo "Running inference step..."
+      - name: Trigger Inference Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: run } = await github.actions.createWorkflowDispatch({
+              owner: 'mahi-DR',
+              repo: 'citibike_pred',
+              workflow_id: 'inference.yml',  # Ensure this matches the exact name of your workflow file
+              ref: 'main'
+            })
 
-  model-training:
-    needs: inference
+  trigger-model-training:
+    needs: trigger-inference  # Ensure this runs only after inference is successful
     runs-on: ubuntu-latest
     steps:
-      - name: Run Model Training
-        uses: actions/checkout@v2
-        run: |
-          echo "Running model training step..."
+      - name: Trigger Model Training Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: run } = await github.actions.createWorkflowDispatch({
+              owner: 'mahi-DR',
+              repo: 'citibike_pred',
+              workflow_id: 'model-training.yml',  # Ensure this matches the exact name of your workflow file
+              ref: 'main'
+            })
