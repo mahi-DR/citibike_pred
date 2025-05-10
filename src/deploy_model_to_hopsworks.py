@@ -3,10 +3,10 @@ import mlflow
 import mlflow.sklearn
 import hopsworks
 
-def register_model_in_hopsworks(model, model_name="LightGBM", project_name="bike"):
+def register_model_in_hopsworks(model, model_name="LightGBM", project_name="citibikes_pred"):
     try:
         # Log into the Hopsworks project
-        project = hopsworks.login(api_key_value="your_hopsworks_api_key", project=project_name)
+        project = hopsworks.login(api_key_value="WcQh11Y4g9GujrSD.nq14GZriFX54wIyUD22JGD3OMjbQolCgwPXpcfXMYmd4VvyCUXT5WEBc7pxr70dD", project=project_name)
         print(f"✅ Logged into Hopsworks project: {project.name}")
 
         # Get the model registry
@@ -22,10 +22,10 @@ def register_model_in_hopsworks(model, model_name="LightGBM", project_name="bike
     except Exception as e:
         print(f"❌ Error registering model: {e}")
 
-def deploy_model_for_inference(model_name="LightGBM", project_name="bike"):
+def deploy_model_for_inference(model_name="LightGBM", project_name="citibikes_pred"):
     try:
         # Log into the Hopsworks project
-        project = hopsworks.login(api_key_value="your_hopsworks_api_key", project=project_name)
+        project = hopsworks.login(api_key_value="WcQh11Y4g9GujrSD.nq14GZriFX54wIyUD22JGD3OMjbQolCgwPXpcfXMYmd4VvyCUXT5WEBc7pxr70dD", project=project_name)
         print(f"✅ Logged into Hopsworks project: {project.name}")
 
         # Get the model registry and retrieve the model
@@ -42,5 +42,5 @@ def deploy_model_for_inference(model_name="LightGBM", project_name="bike"):
 # Example usage
 if __name__ == "__main__":
     model = mlflow.sklearn.load_model("models/lgbm_model")
-    register_model_in_hopsworks(model, model_name="LightGBM", project_name="bike")
-    deploy_model_for_inference(model_name="LightGBM", project_name="bike")
+    register_model_in_hopsworks(model, model_name="LightGBM", project_name="citibikes_pred")
+    deploy_model_for_inference(model_name="LightGBM", project_name="citibikes_pred")
