@@ -31,8 +31,8 @@ jobs:
 
     - name: Commit and Push Model (Optional)
       run: |
-        git config --global user.name "Your Name"
-        git config --global user.email "your.email@example.com"
+        git config --global user.name "mahi-DR"
+        git config --global user.email "desireddy.mahiswar.2002@gmail.com"
         git add model.pkl
         git commit -m "Add trained model"
         git push
